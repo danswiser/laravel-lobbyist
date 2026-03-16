@@ -11,7 +11,7 @@ use WiserWebSolutions\LaravelLegiscan\Enums\Support\StateEnum;
 final class Session extends Data
 {
     #[Computed]
-    public string $id;
+    public int $id;
 
     #[Computed]
     public string $name;

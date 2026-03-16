@@ -8,9 +8,7 @@ class LobbyistServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(
-            __DIR__.'/../config/lobbyist/core.php', 'lobbyist'
-        );
+        $this->mergeConfigFrom(__DIR__.'/../config/lobbyist.php', 'lobbyist');
 
         $this->app->singleton('lobbyist', function ($app) {
             return new LobbyistManager($app);

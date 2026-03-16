@@ -17,19 +17,19 @@ class LegiscanDriver implements LobbyistDriver
     private array $cache;
     protected ?string $stateContext = null;
 
-    public function __construct(array $config)
+    public function __construct()
     {
-        if (! $this->endpoint['api_key'] = config('lobbyist.core.drivers.legiscan.endpoint.api_key')) {
+        if (! $this->endpoint['api_key'] = config('lobbyist.drivers.legiscan.endpoint.api_key')) {
             throw LobbyistException::missingKey();
         }
 
-        if (! $this->endpoint['base_uri'] = config('lobbyist.core.drivers.legiscan.endpoint.base_uri')) {
+        if (! $this->endpoint['base_uri'] = config('lobbyist.drivers.legiscan.endpoint.base_uri')) {
             throw LobbyistException::missingBaseUri();
         }
 
-        $this->endpoint = config('lobbyist.core.drivers.legiscan.endpoint');
-        $this->request = config('lobbyist.core.drivers.legiscan.request');
-        $this->cache = config('lobbyist.core.drivers.legiscan.cache');
+        $this->endpoint = config('lobbyist.drivers.legiscan.endpoint');
+        $this->request = config('lobbyist.drivers.legiscan.request');
+        $this->cache = config('lobbyist.drivers.legiscan.cache');
     }
 
     /**

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\PendingRequest;
 use WiserWebSolutions\Lobbyist\Contracts\LobbyistDriver;
 use Exception;
+use WiserWebSolutions\Lobbyist\Data\Session;
+use WiserWebSolutions\Lobbyist\Data\SessionCollection;
 use WiserWebSolutions\Lobbyist\Exceptions\LobbyistException;
 
 class LegiscanDriver implements LobbyistDriver
@@ -169,10 +171,10 @@ class LegiscanDriver implements LobbyistDriver
      *   ]
      * ]
      */
-    public function getSessionList(?string $state = null): array
+    private function getSessionList(): array
     {
         $params = [
-            'state' => $this->stateContext,
+            'state' => $this->stateContext ?? "US",
         ];
 
         $response = $this->call(operation: 'getSessionList', params: array_filter($params), ttl: 60 * 60 * 24);
@@ -183,6 +185,43 @@ class LegiscanDriver implements LobbyistDriver
 
         return $response;
     }
+
+    /**
+     * Helper method to retrieve just the sessions array from the getSessionList response.
+     *
+     * @param  string|null  $state  The state abbreviation code (e.g., 'CA', 'NY', 'US'), or null for all states and federal
+     * @return array<array{
+     *   session_id: int,
+     *   state_id: int,
+     *   year_start: int,
+     *   year_end: int,
+     *   prefile: int,
+     *   sine_die: int,
+     *   prior: int,
+     *   special: int,
+     *   session_tag: string,
+     *   session_title: string,
+     *   session_name: string,
+     *   dataset_hash: string
+     * }>
+     *
+     * @throws \Exception If the API request fails
+     */
+    public function sessions(): SessionCollection
+    {
+        $response = $this->getSessionList();
+
+        /** @var SessionCollection $sessions */
+        $sessions = Session::collect($response['sessions'] ?? [], SessionCollection::class);
+
+        return $sessions;
+    }
+
+
+
+
+
+
 
     /**
      * This operation returns a master list of summary bill data in the given session_id or current state session.

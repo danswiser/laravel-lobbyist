@@ -190,8 +190,11 @@ class LegiscanDriver implements LobbyistDriver
      * Helper method to retrieve just the sessions array from the getSessionList response.
      *
      * @param  string|null  $state  The state abbreviation code (e.g., 'CA', 'NY', 'US'), or null for all states and federal
-     * @return array<array{
-     *   session_id: int,
+     * @return SessionCollection<Session{
+     *   id: int,
+     *   tag: string,
+     *   title: string,
+     *   name: string,
      *   state_id: int,
      *   year_start: int,
      *   year_end: int,
@@ -199,9 +202,6 @@ class LegiscanDriver implements LobbyistDriver
      *   sine_die: int,
      *   prior: int,
      *   special: int,
-     *   session_tag: string,
-     *   session_title: string,
-     *   session_name: string,
      *   dataset_hash: string
      * }>
      *
@@ -211,10 +211,12 @@ class LegiscanDriver implements LobbyistDriver
     {
         $response = $this->getSessionList();
 
-        /** @var SessionCollection $sessions */
-        $sessions = Session::collect($response['sessions'] ?? [], SessionCollection::class);
-
-        return $sessions;
+        return new SessionCollection(
+            array_map(
+                fn (array $session) => Session::fromLegiscan($session),
+                $response['sessions'] ?? []
+            )
+        );
     }
 
 

@@ -16,19 +16,27 @@ final class Session extends Data
         public string $title,
         #[MapInputName('session_name')]
         public string $name,
-        #[MapInputName('state_id')]
-        public int $stateId,
-        #[MapInputName('year_start')]
-        public int $yearStart,
-        #[MapInputName('year_end')]
-        public int $yearEnd,
-        public bool $prefile,
-        #[MapInputName('sine_die')]
-        public bool $sineDie,
-        public bool $prior,
-        public bool $special,
-        #[MapInputName('dataset_hash')]
-        public string $datasetHash,
+        public array $meta,
     ) {
+    }
+
+    public static function fromLegiscan(array $payload): self
+    {
+        return new self(
+            id: (int) ($payload['session_id'] ?? 0),
+            tag: (string) ($payload['session_tag'] ?? ''),
+            title: (string) ($payload['session_title'] ?? ''),
+            name: (string) ($payload['session_name'] ?? ''),
+            meta: [
+                'state_id' => (int) ($payload['state_id'] ?? 0),
+                'year_start' => (int) ($payload['year_start'] ?? 0),
+                'year_end' => (int) ($payload['year_end'] ?? 0),
+                'prefile' => (bool) ($payload['prefile'] ?? false),
+                'sine_die' => (bool) ($payload['sine_die'] ?? false),
+                'prior' => (bool) ($payload['prior'] ?? false),
+                'special' => (bool) ($payload['special'] ?? false),
+                'dataset_hash' => (string) ($payload['dataset_hash'] ?? ''),
+            ],
+        );
     }
 }

@@ -61,7 +61,7 @@ class LegiscanDriver implements LobbyistDriver
             'op' => $operation,
         ] + $params, fn ($v) => $v !== null && $v !== '');
 
-        $cacheKey = 'legiscan:'.md5($this->endpoint['base_uri'].'|'.http_build_query($query));
+        $cacheKey = 'lobbyist-legiscan:'.md5($this->endpoint['base_uri'].'|'.http_build_query($query));
 
         if ($this->cache['enabled']) {
             if (Cache::store($this->cache['store'])->has($cacheKey)) {

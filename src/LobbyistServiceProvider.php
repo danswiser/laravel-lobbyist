@@ -19,7 +19,7 @@ class LobbyistServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/lobbyist/core.php' => config_path('lobbyist/core.php'),
+                __DIR__.'/../config/lobbyist.php' => config_path('lobbyist.php'),
             ], 'lobbyist-config');
         }
     }

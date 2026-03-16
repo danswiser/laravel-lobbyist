@@ -11,13 +11,13 @@ class LobbyistManager extends Manager
 {
     public function getDefaultDriver(): string
     {
-        return $this->config->get('lobbyist.core.default') ?? 'legiscan';
+        return $this->config->get('lobbyist.drivers.default') ?? 'legiscan';
     }
 
     public function createLegiscanDriver(): LegiscanDriver
     {
         return new LegiscanDriver(
-            $this->config->get('lobbyist.legiscan')
+            $this->config->get('lobbyist.drivers.legiscan')
         );
     }
 

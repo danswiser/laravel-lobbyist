@@ -22,18 +22,19 @@ final class Session extends Data
     #[Computed]
     public StateEnum $state;
 
-    public function __construct( public array $meta ) {
-        $this->id = $this->meta['session_id'];
-        $this->title = $this->meta['session_title'];
-        $this->name = $this->meta['session_name']; // Can we also include the state?
-        $this->state = StateEnum::tryFrom($this->meta['state_id']) ?? StateEnum::US;
+    public function __construct(public array $meta)
+    {
+        $this->id = (int) ($this->meta['session_id'] ?? $this->meta['id'] ?? 0);
+        $this->title = (string) ($this->meta['session_title'] ?? '');
+        $this->name = (string) ($this->meta['session_name'] ?? '');
+        $this->state = StateEnum::tryFrom((int) ($this->meta['state_id'] ?? 0)) ?? StateEnum::US;
     }
 
     public static function fromLegiscan(array $payload): self
     {
         return new self(
             meta: [
-                'id' => (int) ($payload['session_id'] ?? 0),
+                'session_id' => (int) ($payload['session_id'] ?? 0),
                 'state_id' => (int) ($payload['state_id'] ?? 0),
                 'year_start' => (int) ($payload['year_start'] ?? 0),
                 'year_end' => (int) ($payload['year_end'] ?? 0),
